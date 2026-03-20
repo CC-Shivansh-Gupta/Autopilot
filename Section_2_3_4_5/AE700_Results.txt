@@ -1,0 +1,124 @@
+AE700 - Guidance and Control of Unmanned Autonomous Vehicles
+F-4 Phantom | IIT Bombay
+20-Mar-2026 06:30:59
+
+=======================================================
+SECTION 2: KINEMATICS AND DYNAMICS
+=======================================================
+
+--- 2(ii): Individual Force/Moment Axis Tests ---
+
+  Input: fx=5000 lb (thrust)
+    u(15s) = +61.8731  |  q(15s) = +0.0000
+
+  Input: fy=800 lb (side)
+    v(15s) = +9.8997  |  psi(15s) = +0.0000
+
+  Input: fz=800 lb (down)
+    w(15s) = +9.8997  |  pd(15s) = -225.7523
+
+  Input: l=8000 (roll)
+    p(15s) = +4.8063  |  phi(15s) = +36.0545
+
+  Input: m=8000 (pitch)
+    q(15s) = +0.9820  |  theta(15s) = +7.3650
+
+  Input: n=8000 (yaw)
+    r(15s) = +0.8561  |  psi(15s) = +6.4327
+
+  Figure saved: Sec2_ii_AxisTests.png
+
+--- 2(iii): Jxz Gyroscopic Coupling ---
+
+  Jxz = 0:
+    p(10s) = 1.1945 rad/s  |  r(10s) = -0.0574 rad/s  -> INDEPENDENT
+  Jxz = 2200 slug-ft^2:
+    p(10s) = 1.2202 rad/s  |  r(10s) = -0.0251 rad/s  -> COUPLED (different)
+  Coupling arises from Gamma1 and Gamma4 terms in eq (3.17)
+  Figure saved: Sec2_iii_JxzCoupling.png
+
+=======================================================
+SECTION 3: FORCES AND MOMENTS
+=======================================================
+
+--- 3(i): forces_moments.m output at trim ---
+  Va=0.00 ft/s  alpha=0.000 deg  beta=0.0000 deg
+  fx=5376.65 lb  fy=0.00 lb  fz=39000.00 lb
+  l=0.00  m=-0.00  n=0.00 lb.ft
+
+--- 3(ii): Wind gust response ---
+  Head-on gust ug=50 ft/s: Va initial=795.0, final=676.9 ft/s
+  alpha initial=0.00, final=-0.16 deg
+  Figure saved: Sec3_ii_GustResponse.png
+
+--- 3(iii): Control surface deflection tests ---
+
+  Elev+10: theta/q increase:  theta(20s)=-3.0779  |  q(20s)=-0.1188
+  Ail+15: phi/p increase:  phi(20s)=-7.9271  |  p(20s)=-1.2907
+  Rudd+10: psi/r increase:  psi(20s)=-2.4257  |  r(20s)=-0.0141
+  Thr 0.8: u increase:  u(20s)=+726.7783  |  pd(20s)=+6074.5447
+  Figure saved: Sec3_iii_ControlSurface.png
+
+=======================================================
+SECTION 4: LINEAR DESIGN MODELS
+=======================================================
+
+--- 4(iii)+(iv): Trim computation ---
+
+  Trim state (Va=845 ft/s, gamma=0, R=Inf):
+    alpha = -0.501 deg  |  theta = -0.501 deg
+    de=0.0491 rad  da=-0.0000 rad  dr=0.0000 rad  dt=0.9130
+
+  30s simulation state variation (should be ~0):
+    u       : max variation = 0.00e+00
+    phi     : max variation = 2.32e-20
+    theta   : max variation = 0.00e+00
+    q       : max variation = 4.51e-41
+
+  Gamma sweep (climb rate check):
+  gamma[deg]    h_dot expected      h_dot simulated     error
+          -5.0            -73.6466            -73.6466  0.0000
+          -2.0            -29.4901            -29.4901  0.0000
+          +0.0             +0.0000             -0.0000  0.0000
+          +2.0            +29.4901            +29.4901  0.0000
+          +5.0            +73.6466            +73.6466  0.0000
+
+--- 4(v): Constant turn trim (n=1.2) ---
+
+  n=1.2 -> phi=33.56 deg
+
+  CL     Va [ft/s]   R [ft]      psi_change    Status
+  0.7    325.8       4973        74.95         OK
+  0.8    304.7       4352        80.08         OK
+  0.9    287.3       3868        84.88         OK
+  1.0    272.6       3481        89.41         OK
+
+--- 4(vi): Transfer functions ---
+
+  Transfer function DC gains:
+    phi/da       : DC gain = 89.9851
+    chi/phi      : DC gain = -90.0000
+    beta/dr      : DC gain = -0.1919
+    theta/de     : DC gain = 179.9963
+    Va/dt        : DC gain = -1.6362
+    Va/theta     : DC gain = 178.3638
+  Figure saved: Sec4_vi_BodePlots.png
+
+--- 4(vii): State-space models ---
+
+  Longitudinal eigenvalues:
+    +0.000000
+    -1.5806+4.8344i  wn=5.086 rad/s  zeta=0.311
+    -1.5806-4.8344i  wn=5.086 rad/s  zeta=0.311
+    -0.0335+0.0307i  wn=0.045 rad/s  zeta=0.738
+    -0.0335-0.0307i  wn=0.045 rad/s  zeta=0.738
+
+  Lateral eigenvalues:
+    +0.000000  (heading integrator)
+    -0.2851+5.5494i  (Dutch roll)
+    -0.2851-5.5494i  (Dutch roll)
+    -4.3150  (Roll mode)
+    -0.0075  (Roll mode)
+
+  Figures saved: Sec4_vii_StepResponses.png
+
