@@ -1,0 +1,5 @@
+# Chapter 7 — Sensor Simulation
+
+This chapter implements a simulated sensor suite for the F-4 Phantom UAV, following Beard & McLain Chapter 7. The sensors modelled are: three-axis rate gyros (with Gauss-Markov bias drift and white noise, Eq 7.5), three-axis accelerometers measuring specific force (Eq 7.3), a barometric static-pressure altimeter and a pitot-tube dynamic-pressure airspeed sensor (Eqs 7.9–7.10), and a GPS receiver that reports position (north/east/altitude), ground speed, and course angle (Eqs 7.18–7.26). Each sensor adds realistic noise and, where applicable, a first-order Markov bias process driven by the simulation timestep `P.Ts`.
+
+The main deliverable is `sensors.m`, which takes the full 12-state vector, controls, wind, and parameter struct and returns a sensor struct `y`. Additional noise parameters (`sigma_gyro`, `sigma_GPS`, etc.) and time constants (`tau_g`, `tau_GPS`) must be added to `F4_params.m`. The test script `Section7_Sensors.m` runs the equations of motion at trim for 30 s and plots each sensor output against the corresponding true state so that noise levels and bias drift can be visually verified.
